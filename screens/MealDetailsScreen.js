@@ -3,13 +3,27 @@ import { MEALS } from '../data/dummy-data';
 import MealInfo from '../components/MealInfo';
 import Subtitle from '../components/MealDetail/Subtitle';
 import List from '../components/MealDetail/List';
+import { useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import IconButton from '../components/IconButton';
 
 function MealDetailsScreen({ route }) {
   const { id } = route.params;
+  const navigation = useNavigation();
   const meal = MEALS.find((meal) => meal.id === id);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <IconButton icon="star" onPress={pressHandler} />,
+    });
+  }, [navigation, pressHandler]);
+
+  function pressHandler() {
+    console.log('Pressed');
+  }
+
   return (
-    <ScrollView style>
+    <ScrollView style={styles.container}>
       <Image style={styles.image} source={{ uri: meal.imageUrl }} />
       <Text style={styles.title}>{meal.title}</Text>
       <MealInfo
